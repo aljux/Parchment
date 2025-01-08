@@ -153,15 +153,4 @@ final class NavigationController: UINavigationController {
         navigationBar.compactAppearance = appearance
         navigationBar.scrollEdgeAppearance = appearance
     }
-
-    // For debugging purposes. Adds a hook to push a new view
-    // controller to debug navigation controller related issues.
-    override func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            let viewController = UIViewController()
-            viewController.title = "Page"
-            viewController.view.backgroundColor = .white
-            pushViewController(viewController, animated: true)
-        }
-    }
 }

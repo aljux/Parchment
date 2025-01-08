@@ -287,7 +287,6 @@ open class PagingViewController:
 
     private let pagingController: PagingController
     private var didLayoutSubviews: Bool = false
-    private var didTransitionSize: Bool = false
 
     private var pagingView: PagingView {
         return view as! PagingView
@@ -489,20 +488,6 @@ open class PagingViewController:
         configureContentInteraction()
     }
 
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if #unavailable(iOS 16), didTransitionSize {
-            view.layoutIfNeeded()
-            pagingController.transitionSize()
-        }
-    }
-
-    open override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        didTransitionSize = false
-        didLayoutSubviews = false
-    }
-
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -517,10 +502,9 @@ open class PagingViewController:
 
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        didTransitionSize = true
         coordinator.animate(alongsideTransition: { _ in
             self.pagingController.transitionSize()
-        })
+    }, completion: nil)
     }
 
     /// Register cell class for paging cell
