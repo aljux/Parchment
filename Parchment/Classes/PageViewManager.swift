@@ -77,7 +77,8 @@ final class PageViewManager {
             resetState()
             delegate?.scrollForward()
         } else if let nextViewController = nextViewController,
-            let selectedViewController = selectedViewController {
+                  let selectedViewController = selectedViewController
+        {
             beginAppearanceTransition(false, for: selectedViewController, animated: animated)
             beginAppearanceTransition(true, for: nextViewController, animated: animated)
 
@@ -107,7 +108,8 @@ final class PageViewManager {
             resetState()
             delegate?.scrollReverse()
         } else if let previousViewController = previousViewController,
-            let selectedViewController = selectedViewController {
+                  let selectedViewController = selectedViewController
+        {
             beginAppearanceTransition(false, for: selectedViewController, animated: animated)
             beginAppearanceTransition(true, for: previousViewController, animated: animated)
 
@@ -282,6 +284,11 @@ final class PageViewManager {
     // MARK: - Private Methods
 
     private func selectViewController(_ viewController: UIViewController, animated: Bool) {
+        // No need to select the same viewcontroller that is selected
+        if selectedViewController == viewController {
+            return
+        }
+
         let oldSelectedViewController = selectedViewController
         let newPreviousViewController = dataSource?.viewControllerBefore(viewController)
         let newNextViewController = dataSource?.viewControllerAfter(viewController)
@@ -296,44 +303,50 @@ final class PageViewManager {
 
         if let oldPreviosViewController = previousViewController {
             if oldPreviosViewController !== viewController,
-                oldPreviosViewController !== newPreviousViewController,
-                oldPreviosViewController !== newNextViewController {
+               oldPreviosViewController !== newPreviousViewController,
+               oldPreviosViewController !== newNextViewController
+            {
                 delegate?.removeViewController(oldPreviosViewController)
             }
         }
 
         if let oldSelectedViewController = selectedViewController {
             if oldSelectedViewController !== newPreviousViewController,
-                oldSelectedViewController !== newNextViewController {
+               oldSelectedViewController !== newNextViewController
+            {
                 delegate?.removeViewController(oldSelectedViewController)
             }
         }
 
         if let oldNextViewController = nextViewController {
             if oldNextViewController !== viewController,
-                oldNextViewController !== newPreviousViewController,
-                oldNextViewController !== newNextViewController {
+               oldNextViewController !== newPreviousViewController,
+               oldNextViewController !== newNextViewController
+            {
                 delegate?.removeViewController(oldNextViewController)
             }
         }
 
         if let newPreviousViewController = newPreviousViewController {
             if newPreviousViewController !== selectedViewController,
-                newPreviousViewController !== previousViewController,
-                newPreviousViewController !== nextViewController {
+               newPreviousViewController !== previousViewController,
+               newPreviousViewController !== nextViewController
+            {
                 delegate?.addViewController(newPreviousViewController)
             }
         }
 
         if viewController !== nextViewController,
-            viewController !== previousViewController {
+           viewController !== previousViewController
+        {
             delegate?.addViewController(viewController)
         }
 
         if let newNextViewController = newNextViewController {
             if newNextViewController !== selectedViewController,
-                newNextViewController !== previousViewController,
-                newNextViewController !== nextViewController {
+               newNextViewController !== previousViewController,
+               newNextViewController !== nextViewController
+            {
                 delegate?.addViewController(newNextViewController)
             }
         }
@@ -451,7 +464,8 @@ final class PageViewManager {
 
     private func willScrollForward() {
         if let selectedViewController = selectedViewController,
-            let nextViewController = nextViewController {
+           let nextViewController = nextViewController
+        {
             delegate?.willScroll(from: selectedViewController, to: nextViewController)
             beginAppearanceTransition(true, for: nextViewController, animated: true)
             beginAppearanceTransition(false, for: selectedViewController, animated: true)
@@ -460,7 +474,8 @@ final class PageViewManager {
 
     private func willScrollReverse() {
         if let selectedViewController = selectedViewController,
-            let previousViewController = previousViewController {
+           let previousViewController = previousViewController
+        {
             delegate?.willScroll(from: selectedViewController, to: previousViewController)
             beginAppearanceTransition(true, for: previousViewController, animated: true)
             beginAppearanceTransition(false, for: selectedViewController, animated: true)
